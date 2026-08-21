@@ -1,0 +1,7 @@
+# 安裝套件與正式建置產物由本機或 CI 產生，不納入版本控制。
+node_modules/
+dist/
+
+# 本機環境與編輯器暫存檔。
+.env.local
+.DS_Store
