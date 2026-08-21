@@ -10,6 +10,17 @@ describe('App', () => {
     expect(wrapper.get('h1').text()).toBe('企業系統開發工程師')
   })
 
+  it('首頁以可理解的即時資料流呈現企業系統能力', () => {
+    const wrapper = mount(App)
+    const flow = wrapper.get('[aria-label="企業系統即時資料流"]')
+
+    expect(flow.text()).toContain('SYSTEM FLOW')
+    expect(flow.text()).toContain('需求分析')
+    expect(flow.text()).toContain('API 200 OK')
+    expect(flow.text()).toContain('資料寫入成功')
+    expect(flow.findAll('.system-flow__node')).toHaveLength(4)
+  })
+
   it('顯示四個匿名代表案例與正確聯絡方式', () => {
     const wrapper = mount(App)
 
