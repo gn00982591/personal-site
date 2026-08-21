@@ -796,6 +796,111 @@ h3 {
   animation: signature-signal 2.4s ease-in-out infinite;
 }
 
+/* AI 協作區塊以工程流程卡呈現，強調分析與驗證而非單純生成程式。 */
+.ai-practice {
+  position: relative;
+  grid-column: 1 / -1;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 34%),
+    var(--color-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.ai-practice__heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.ai-practice__heading h3 {
+  margin-bottom: .65rem;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.ai-practice > p:not(.ai-practice__verification) {
+  max-width: 78ch;
+  color: var(--color-text-muted);
+}
+
+.ai-practice__tool {
+  flex: 0 0 auto;
+  padding: .4rem .7rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent-strong);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .7rem;
+  font-weight: 900;
+}
+
+.ai-practice__workflow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-practice__workflow li {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: .7rem;
+  align-items: center;
+  min-height: 4rem;
+  padding: .8rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--color-surface-muted) 72%, transparent);
+  opacity: 0;
+  transform: translateY(.6rem);
+  transition: opacity 420ms ease calc(var(--item-index) * 90ms + 280ms), transform 420ms ease calc(var(--item-index) * 90ms + 280ms), border-color 180ms ease;
+}
+
+.is-visible .ai-practice__workflow li {
+  opacity: 1;
+  transform: none;
+}
+
+.ai-practice__workflow li:hover {
+  border-color: var(--color-accent);
+}
+
+.ai-practice__workflow li > span {
+  color: var(--color-accent);
+  font-size: .7rem;
+  font-weight: 900;
+}
+
+.ai-practice__workflow strong {
+  font-size: .82rem;
+  line-height: 1.55;
+}
+
+.ai-practice__verification {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-bottom: 0;
+  color: var(--color-accent-strong);
+  font-size: .84rem;
+  font-weight: 900;
+}
+
+.ai-practice__verification span {
+  display: grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+}
+
 .section--contact {
   padding-top: 2rem;
 }
@@ -988,6 +1093,10 @@ h3 {
     grid-column: auto;
   }
 
+  .ai-practice__workflow {
+    grid-template-columns: 1fr;
+  }
+
   /* 手機版取消傾斜並壓縮高度，確保每個流程節點可直接閱讀。 */
   .system-flow {
     min-height: auto;
@@ -1038,6 +1147,12 @@ h3 {
 
   .project-card::after {
     display: none;
+  }
+
+  .ai-practice__heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .4rem;
   }
 
   .system-flow__node {

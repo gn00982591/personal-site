@@ -1,7 +1,8 @@
 <script setup>
 defineProps({
   methods: { type: Array, required: true },
-  tools: { type: Array, required: true }
+  tools: { type: Array, required: true },
+  aiPractice: { type: Object, required: true }
 })
 </script>
 
@@ -28,6 +29,25 @@ defineProps({
           <span>Vue 3</span><i></i><span>ASP.NET</span><i></i><span>SQL Server</span>
         </div>
       </div>
+
+      <!-- AI 能力以實際分析流程與驗證原則呈現，避免只列工具名稱。 -->
+      <article class="ai-practice" aria-label="AI 輔助企業系統分析與開發">
+        <div class="ai-practice__heading">
+          <div>
+            <p class="section-kicker">AI Assisted Engineering</p>
+            <h3>{{ aiPractice.title }}</h3>
+          </div>
+          <span class="ai-practice__tool">Cursor + AI</span>
+        </div>
+        <p>{{ aiPractice.summary }}</p>
+        <ol class="ai-practice__workflow">
+          <li v-for="(item, index) in aiPractice.workflow" :key="item" :style="`--item-index: ${index}`">
+            <span>{{ String(index + 1).padStart(2, '0') }}</span>
+            <strong>{{ item }}</strong>
+          </li>
+        </ol>
+        <p class="ai-practice__verification"><span aria-hidden="true">✓</span>{{ aiPractice.verification }}</p>
+      </article>
     </div>
   </section>
 </template>
