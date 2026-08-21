@@ -1,7 +1,10 @@
-import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import App from '../App.vue'
+
+// 每個測試後卸載元件，避免捲動監聽器與觀察器殘留到下一個案例。
+enableAutoUnmount(afterEach)
 
 describe('App', () => {
   it('顯示企業系統開發工程師職稱', () => {
@@ -86,5 +89,86 @@ describe('App', () => {
 
     await nextTick()
     expect(wrapper.findAll('[data-reveal]').every((section) => section.classes('is-visible'))).toBe(true)
+  })
+
+  it('依上下捲動方向重播區塊進場效果', async () => {
+    let observerCallback
+    const unobserve = vi.fn()
+    const disconnect = vi.fn()
+    const animationFrames = []
+    let nextAnimationFrameId = 1
+    const originalInnerHeight = window.innerHeight
+    const originalScrollHeight = document.documentElement.scrollHeight
+
+    // 模擬瀏覽器觀察器，直接控制區塊進入與離開畫面的時機。
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(callback) {
+        observerCallback = callback
+      }
+
+      observe() {}
+      unobserve(target) { unobserve(target) }
+      disconnect() { disconnect() }
+    })
+    Object.defineProperty(window, 'scrollY', { configurable: true, writable: true, value: 0 })
+    Object.defineProperty(window, 'innerHeight', { configurable: true, writable: true, value: 500 })
+    Object.defineProperty(document.documentElement, 'scrollHeight', { configurable: true, value: 1000 })
+    const addEventListener = vi.spyOn(window, 'addEventListener')
+    const removeEventListener = vi.spyOn(window, 'removeEventListener')
+    const animationFrame = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      const id = nextAnimationFrameId++
+      animationFrames.push({ id, callback })
+      return id
+    })
+    const cancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame')
+
+    const wrapper = mount(App)
+    const section = wrapper.get('[data-reveal]').element
+    const scrollListener = addEventListener.mock.calls.find(([eventName]) => eventName === 'scroll')[1]
+    const animationFrameCallCountBeforeScroll = animationFrame.mock.calls.length
+    animationFrames.length = 0
+
+    window.scrollY = 200
+    window.dispatchEvent(new Event('scroll'))
+    window.dispatchEvent(new Event('scroll'))
+    expect(animationFrame.mock.calls.length - animationFrameCallCountBeforeScroll).toBe(1)
+    animationFrames.shift().callback()
+    await nextTick()
+    expect(wrapper.attributes('style')).toContain('--scroll-progress: 0.4')
+
+    observerCallback([{ target: section, isIntersecting: true }])
+    await nextTick()
+    expect(section.dataset.revealDirection).toBe('down')
+    expect(section.classList.contains('is-visible')).toBe(true)
+
+    observerCallback([{ target: section, isIntersecting: false }])
+    expect(section.classList.contains('is-visible')).toBe(false)
+
+    window.scrollY = 100
+    window.dispatchEvent(new Event('scroll'))
+    animationFrames.shift().callback()
+    observerCallback([{ target: section, isIntersecting: true }])
+    await nextTick()
+    expect(section.dataset.revealDirection).toBe('up')
+    expect(section.classList.contains('is-visible')).toBe(true)
+    expect(unobserve).not.toHaveBeenCalled()
+    expect(wrapper.get('.scroll-progress').exists()).toBe(true)
+
+    // 保留一個尚未執行的影格，確認元件卸載時會完整清理資源。
+    window.scrollY = 50
+    window.dispatchEvent(new Event('scroll'))
+    const pendingAnimationFrameId = animationFrames[0].id
+    wrapper.unmount()
+    expect(disconnect).toHaveBeenCalledTimes(1)
+    expect(removeEventListener).toHaveBeenCalledWith('scroll', scrollListener)
+    expect(cancelAnimationFrame).toHaveBeenCalledWith(pendingAnimationFrameId)
+
+    Object.defineProperty(window, 'innerHeight', { configurable: true, writable: true, value: originalInnerHeight })
+    Object.defineProperty(document.documentElement, 'scrollHeight', { configurable: true, value: originalScrollHeight })
+    addEventListener.mockRestore()
+    removeEventListener.mockRestore()
+    animationFrame.mockRestore()
+    cancelAnimationFrame.mockRestore()
+    vi.unstubAllGlobals()
   })
 })
