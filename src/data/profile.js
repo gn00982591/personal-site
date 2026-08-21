@@ -4,6 +4,12 @@ export const profile = {
   direction: '企業系統開發＋系統分析',
   summary: '結合系統分析、後端開發與資料流程整合，將複雜的企業規則轉換為穩定、可維護的系統。',
   about: '專注於企業內部系統的開發與維運，能從使用者操作與需求開始，依序追查前端、API、後端服務、Stored Procedure、Function 與資料表，並以最小修改方式改善既有系統。',
+  // 專業定位避免使用未確認的年資或量化成果，只呈現實際工作能力。
+  highlights: [
+    { title: '系統分析', description: '釐清需求、規則與影響範圍' },
+    { title: '跨層開發', description: '串接前端、API、後端與資料庫' },
+    { title: '穩定維運', description: '最小修改、回歸測試與可回滾' }
+  ],
   skills: [
     '需求釐清與業務流程分析',
     '跨層系統問題追查',
