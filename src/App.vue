@@ -43,7 +43,7 @@ onBeforeUnmount(() => revealObserver?.disconnect())
     <HeroSection :title="profile.title" :direction="profile.direction" :summary="profile.summary" />
     <ProfileSection :about="profile.about" :highlights="profile.highlights" :skills="profile.skills" />
     <ProjectsSection :projects="profile.projects" />
-    <WorkMethodSection :methods="profile.workMethods" :tools="profile.tools" />
+    <WorkMethodSection :methods="profile.workMethods" :tools="profile.tools" :ai-practice="profile.aiPractice" />
     <ContactSection :contact="profile.contact" />
   </main>
     <footer class="site-footer">
