@@ -51,6 +51,18 @@ describe('App', () => {
     expect(wrapper.findAll('.project-card[data-sequence]')).toHaveLength(4)
   })
 
+  it('將 Cursor 與 AI 使用呈現為可驗證的工程能力', () => {
+    const wrapper = mount(App)
+    const aiPractice = wrapper.get('[aria-label="AI 輔助企業系統分析與開發"]')
+
+    expect(aiPractice.text()).toContain('Cursor')
+    expect(aiPractice.text()).toContain('Vue → JavaScript API → Controller')
+    expect(aiPractice.text()).toContain('最小修改')
+    expect(aiPractice.text()).toContain('實際程式、資料與測試結果')
+    expect(wrapper.text()).toContain('AI 輔助程式邏輯分析')
+    expect(wrapper.text()).toContain('Context Engineering')
+  })
+
   it('不顯示機密識別資訊', () => {
     const wrapper = mount(App)
 
