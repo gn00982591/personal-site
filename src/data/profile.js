@@ -19,6 +19,7 @@ export const profile = {
     'ERP／WMS 資料整合',
     '報表與列印流程',
     'API、授權與連線異常排查',
+    'AI 輔助企業系統分析與開發',
     '測試案例、回歸測試與上線管理'
   ],
   projects: [
@@ -58,7 +59,22 @@ export const profile = {
     '維持前端、後端與資料庫規則一致',
     '補充測試案例與回歸檢查'
   ],
-  tools: ['ASP.NET Core', 'ASP.NET MVC', 'C#', 'Vue 3', 'JavaScript', 'EF Core', 'SQL Server', 'RDL', 'REST API', 'Git'],
+  // AI 能力來自實際 Cursor 協作流程，內容保持匿名並排除公司內部識別資訊。
+  aiPractice: {
+    title: 'AI 輔助企業系統分析與開發',
+    summary: '運用 Cursor 與 AI 讀取既有專案，還原跨層資料流程，協助釐清需求、定位錯誤、規劃最小修改與回歸測試。',
+    workflow: [
+      'Vue → JavaScript API → Controller',
+      'Service／EF Core → Stored Procedure／Function → Table',
+      '比對欄位、型別、Null、狀態與呼叫順序',
+      '整理影響範圍、最小修改、回滾與回歸測試'
+    ],
+    verification: 'AI 產出一律以實際程式、資料與測試結果驗證'
+  },
+  tools: [
+    'ASP.NET Core', 'ASP.NET MVC', 'C#', 'Vue 3', 'JavaScript', 'EF Core', 'SQL Server', 'RDL', 'REST API', 'Git',
+    'Cursor', 'AI 協作開發', 'AI 輔助程式邏輯分析', 'Context Engineering', 'AI 輔助測試設計'
+  ],
   contact: {
     email: 'gn00982591@gmail.com',
     github: 'https://github.com/gn00982591'
