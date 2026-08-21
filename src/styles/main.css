@@ -132,7 +132,27 @@ button {
 }
 
 .section {
+  position: relative;
+  overflow: hidden;
   padding: 7rem 0;
+}
+
+/* 低對比格線讓各區塊保有工程感，同時不干擾人物與文字。 */
+.section:not(.hero)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-accent) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 5%, transparent) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+
+.section > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .section--muted {
@@ -404,6 +424,161 @@ h3 {
   box-shadow: var(--shadow-card);
 }
 
+/* 關於我改為人物、故事與技能三區，寬螢幕形成完整個人介紹。 */
+.profile-layout {
+  display: grid;
+  grid-template-columns: minmax(14rem, .7fr) minmax(0, 1.15fr) minmax(18rem, .95fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.profile-portrait {
+  position: relative;
+  align-self: stretch;
+  height: 32rem;
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8rem 8rem 2rem 2rem;
+  background: var(--color-surface-muted);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.profile-portrait::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  height: 35%;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--color-accent-strong) 72%, transparent));
+  pointer-events: none;
+}
+
+.profile-portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: saturate(.88) contrast(1.02);
+  transition: transform 700ms cubic-bezier(.2, .8, .2, 1), filter 300ms ease;
+}
+
+.profile-portrait:hover img {
+  transform: scale(1.025);
+  filter: saturate(1) contrast(1.02);
+}
+
+.profile-portrait figcaption {
+  position: absolute;
+  z-index: 3;
+  left: 1.15rem;
+  right: 1.15rem;
+  bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  color: #ffffff;
+  font-size: .76rem;
+  font-weight: 800;
+}
+
+.profile-portrait__status {
+  width: .55rem;
+  height: .55rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #9ce8df;
+  box-shadow: 0 0 0 .3rem rgb(156 232 223 / 20%);
+  animation: flow-pulse 1.8s ease-in-out infinite;
+}
+
+.profile-portrait__orbit {
+  position: absolute;
+  z-index: 3;
+  inset: 1rem;
+  border: 1px solid rgb(255 255 255 / 38%);
+  border-radius: 7rem 7rem 1.35rem 1.35rem;
+  pointer-events: none;
+}
+
+.profile-portrait__orbit span {
+  position: absolute;
+  padding: .25rem .5rem;
+  border-radius: 999px;
+  background: rgb(247 245 239 / 82%);
+  color: #31505a;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .58rem;
+  font-weight: 900;
+  backdrop-filter: blur(8px);
+  animation: portrait-float 4s ease-in-out infinite;
+}
+
+.profile-portrait__orbit span:nth-child(1) { top: 18%; left: .5rem; }
+.profile-portrait__orbit span:nth-child(2) { top: 42%; right: .5rem; animation-delay: -1.3s; }
+.profile-portrait__orbit span:nth-child(3) { bottom: 24%; left: .5rem; animation-delay: -2.6s; }
+
+.profile-story .lead {
+  max-width: 54ch;
+}
+
+.profile-highlights {
+  display: grid;
+  gap: .7rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-highlights li {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  column-gap: .75rem;
+  padding: .85rem 1rem;
+  border-left: 2px solid var(--color-accent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent);
+  transition: transform 220ms ease, border-color 220ms ease;
+}
+
+.profile-highlights li:hover {
+  transform: translateX(.35rem);
+}
+
+.profile-highlights li > span {
+  grid-row: 1 / span 2;
+  color: var(--color-accent);
+  font-size: .7rem;
+  font-weight: 900;
+}
+
+.profile-highlights strong,
+.profile-highlights small {
+  display: block;
+}
+
+.profile-highlights small {
+  color: var(--color-text-muted);
+}
+
+.profile-skills {
+  position: relative;
+}
+
+.profile-skills::before {
+  content: '';
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  top: -1.5rem;
+  right: -1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1rem color-mix(in srgb, var(--color-accent) 5%, transparent);
+  animation: slow-spin 16s linear infinite;
+}
+
 .tag-list {
   display: flex;
   flex-wrap: wrap;
@@ -421,6 +596,13 @@ h3 {
   color: var(--color-text-muted);
   font-size: .86rem;
   font-weight: 700;
+  transition: transform 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.tag-list li:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-strong);
+  transform: translateY(-2px);
 }
 
 .tag-list--compact {
@@ -446,6 +628,44 @@ h3 {
   border-radius: 1.5rem;
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform 320ms cubic-bezier(.2, .8, .2, 1), border-color 220ms ease, box-shadow 320ms ease;
+}
+
+.project-card::after {
+  content: 'VIEW  /  CASE';
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.15rem;
+  color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.project-card:hover {
+  z-index: 1;
+  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+  box-shadow: 0 24px 56px color-mix(in srgb, var(--color-accent-strong) 16%, transparent);
+  transform: translateY(-.45rem);
+}
+
+.project-card__signal {
+  position: absolute;
+  width: 7rem;
+  height: 7rem;
+  top: -4.5rem;
+  right: -4.5rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  opacity: .22;
+  transition: transform 500ms ease, opacity 300ms ease;
+}
+
+.project-card:hover .project-card__signal {
+  opacity: .55;
+  transform: scale(1.25);
 }
 
 .project-card__number {
@@ -472,27 +692,108 @@ h3 {
 }
 
 .method-list {
+  position: relative;
   margin: 2rem 0 0;
   padding: 0;
   list-style: none;
 }
 
+.method-timeline::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  top: 1rem;
+  bottom: 1rem;
+  left: 1.18rem;
+  background: linear-gradient(var(--color-accent), var(--color-border));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.2s cubic-bezier(.2, .8, .2, 1) 180ms;
+}
+
+.is-visible .method-timeline::before {
+  transform: scaleY(1);
+}
+
 .method-list li {
+  position: relative;
   display: grid;
   grid-template-columns: 2.5rem 1fr;
   gap: 1rem;
   padding: 1rem 0;
   border-bottom: 1px solid var(--color-border);
+  opacity: 0;
+  transform: translateX(-.7rem);
+  transition: opacity 420ms ease calc(var(--item-index) * 90ms + 220ms), transform 420ms ease calc(var(--item-index) * 90ms + 220ms);
+}
+
+.is-visible .method-list li {
+  opacity: 1;
+  transform: none;
 }
 
 .method-list span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg);
   color: var(--color-accent);
+  font-size: .72rem;
   font-weight: 900;
 }
 
 .method-list p {
+  align-self: center;
   margin: 0;
   font-weight: 700;
+}
+
+.tool-panel--stack {
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-panel--stack .tag-list li {
+  opacity: 0;
+  transform: translateY(.5rem);
+  transition: opacity 350ms ease calc(var(--item-index) * 55ms + 250ms), transform 350ms ease calc(var(--item-index) * 55ms + 250ms), border-color 180ms ease, color 180ms ease;
+}
+
+.is-visible .tool-panel--stack .tag-list li {
+  opacity: 1;
+  transform: none;
+}
+
+.tool-panel__signature {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 2rem;
+  color: var(--color-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .62rem;
+  font-weight: 900;
+}
+
+.tool-panel__signature i {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.tool-panel__signature i::after {
+  content: '';
+  position: absolute;
+  inset: 0 100% 0 0;
+  background: var(--color-accent);
+  animation: signature-signal 2.4s ease-in-out infinite;
 }
 
 .section--contact {
@@ -500,6 +801,7 @@ h3 {
 }
 
 .contact-card {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 3rem;
@@ -509,6 +811,22 @@ h3 {
   border-radius: 2rem;
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.contact-card::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 22rem;
+  height: 22rem;
+  right: -8rem;
+  top: -10rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 17%, transparent);
+  filter: blur(12px);
+  animation: contact-glow 6s ease-in-out infinite alternate;
 }
 
 .contact-card h2 {
@@ -517,6 +835,67 @@ h3 {
 
 .contact-card__links {
   flex-direction: column;
+}
+
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin-bottom: 1rem;
+  padding: .35rem .65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-accent-strong) !important;
+  font-size: .72rem !important;
+  font-weight: 900;
+}
+
+.availability span {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--color-accent) 15%, transparent);
+  animation: flow-pulse 1.8s ease-in-out infinite;
+}
+
+/* 各區塊內部元素採分段進場，形成由人物到案例的閱讀節奏。 */
+[data-reveal] .profile-portrait,
+[data-reveal] .profile-story,
+[data-reveal] .profile-skills,
+[data-reveal] .project-card {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: opacity 560ms ease, transform 560ms cubic-bezier(.2, .8, .2, 1);
+}
+
+[data-reveal].is-visible .profile-portrait,
+[data-reveal].is-visible .profile-story,
+[data-reveal].is-visible .profile-skills,
+[data-reveal].is-visible .project-card {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal].is-visible .profile-story { transition-delay: 100ms; }
+[data-reveal].is-visible .profile-skills { transition-delay: 200ms; }
+[data-reveal].is-visible .project-card { transition-delay: calc(var(--card-index) * 100ms); }
+
+@keyframes portrait-float {
+  50% { transform: translateY(-.35rem); }
+}
+
+@keyframes slow-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes signature-signal {
+  50% { right: 0; }
+  100% { inset: 0 0 0 100%; }
+}
+
+@keyframes contact-glow {
+  to { transform: translate(-2rem, 2rem) scale(1.12); }
 }
 
 .site-footer {
@@ -594,6 +973,21 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .profile-layout {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .profile-portrait {
+    width: min(100%, 22rem);
+    height: 27rem;
+    justify-self: center;
+  }
+
+  .profile-skills {
+    grid-column: auto;
+  }
+
   /* 手機版取消傾斜並壓縮高度，確保每個流程節點可直接閱讀。 */
   .system-flow {
     min-height: auto;
@@ -624,6 +1018,26 @@ h3 {
   .skill-panel,
   .tool-panel {
     padding: 1.4rem;
+  }
+
+  /* 窄螢幕依序呈現人物、介紹與技能，避免照片與文字互相擠壓。 */
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-portrait {
+    width: min(100%, 20rem);
+    height: 28rem;
+    justify-self: center;
+    border-radius: 7rem 7rem 1.5rem 1.5rem;
+  }
+
+  .profile-skills {
+    grid-column: auto;
+  }
+
+  .project-card::after {
+    display: none;
   }
 
   .system-flow__node {

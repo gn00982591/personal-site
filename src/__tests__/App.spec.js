@@ -32,6 +32,25 @@ describe('App', () => {
     expect(wrapper.get('a[href="https://github.com/gn00982591"]').exists()).toBe(true)
   })
 
+  it('以人物照片與專業定位介紹本人', () => {
+    const wrapper = mount(App)
+    const portrait = wrapper.get('img[alt="企業系統開發工程師個人形象照"]')
+
+    expect(portrait.attributes('src')).toContain('profile-portrait.webp')
+    expect(wrapper.findAll('.profile-highlights li')).toHaveLength(3)
+    expect(wrapper.text()).toContain('系統分析')
+    expect(wrapper.text()).toContain('跨層開發')
+    expect(wrapper.text()).toContain('穩定維運')
+  })
+
+  it('以專業狀態與時間軸強化後段內容', () => {
+    const wrapper = mount(App)
+
+    expect(wrapper.get('.method-timeline').attributes('aria-label')).toBe('企業系統問題處理流程')
+    expect(wrapper.text()).toContain('目前開放職涯交流')
+    expect(wrapper.findAll('.project-card[data-sequence]')).toHaveLength(4)
+  })
+
   it('不顯示機密識別資訊', () => {
     const wrapper = mount(App)
 

@@ -41,7 +41,7 @@ onBeforeUnmount(() => revealObserver?.disconnect())
     <SiteHeader />
   <main>
     <HeroSection :title="profile.title" :direction="profile.direction" :summary="profile.summary" />
-    <ProfileSection :about="profile.about" :skills="profile.skills" />
+    <ProfileSection :about="profile.about" :highlights="profile.highlights" :skills="profile.skills" />
     <ProjectsSection :projects="profile.projects" />
     <WorkMethodSection :methods="profile.workMethods" :tools="profile.tools" />
     <ContactSection :contact="profile.contact" />
