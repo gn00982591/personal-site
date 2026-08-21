@@ -85,9 +85,9 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.0",
-    "jsdom": "^26.0.0",
+    "jsdom": "^30.0.0",
     "vite": "^8.0.0",
-    "vitest": "^3.2.0"
+    "vitest": "^4.1.0"
   }
 }
 ```
