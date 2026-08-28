@@ -63,6 +63,32 @@ describe('App', () => {
     expect(wrapper.findAll('.project-card[data-sequence]')).toHaveLength(4)
   })
 
+  it('在聯絡區提供 104 履歷連結與 QR Code', () => {
+    const wrapper = mount(App)
+    const resumeLink = wrapper.get('a[href="https://pda.104.com.tw/profile/share/dkflj2HPCNcMTCAkHoRX7U6r90nVp39U"]')
+    const resumeQrCode = wrapper.get('img[alt="掃描 QR Code 查看 104 完整履歷"]')
+
+    // 104 履歷使用安全的新分頁連結，QR Code 則提供電腦版訪客以手機掃描。
+    expect(resumeLink.text()).toContain('查看 104 完整履歷')
+    expect(resumeLink.attributes('target')).toBe('_blank')
+    expect(resumeLink.attributes('rel')).toContain('noreferrer')
+    expect(resumeQrCode.attributes('src')).toContain('resume-104-qr.png')
+  })
+
+  it('在聯絡區最底端精簡呈現網站建立流程與版本', () => {
+    vi.stubEnv('VITE_GIT_BRANCH', 'main')
+    vi.stubEnv('VITE_GIT_SHA', '45db5f35abbab35d852d7125e08e9e5af94e61e5')
+    const wrapper = mount(App)
+    const siteBuildMeta = wrapper.get('[aria-label="網站建立流程與版本"]')
+
+    // GitHub 分支與短版 Commit 碼對應實際部署來源，避免使用無法追溯的固定版號。
+    expect(siteBuildMeta.text()).toContain('需求整理 → AI 協作設計 → Vue 開發 → 測試驗證 → GitHub Pages')
+    expect(siteBuildMeta.text()).toContain('GitHub')
+    expect(siteBuildMeta.text()).toContain('main · 45db5f3')
+    expect(siteBuildMeta.text()).toContain('2026.08')
+    vi.unstubAllEnvs()
+  })
+
   it('將 Cursor 與 AI 使用呈現為可驗證的工程能力', () => {
     const wrapper = mount(App)
     const aiPractice = wrapper.get('[aria-label="AI 輔助企業系統分析與開發"]')
