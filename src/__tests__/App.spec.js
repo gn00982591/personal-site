@@ -46,6 +46,15 @@ describe('App', () => {
     expect(wrapper.text()).toContain('穩定維運')
   })
 
+  it('以現職企業規模與營運責任呈現系統穩定性', () => {
+    const wrapper = mount(App)
+
+    // 透過公開且匿名的工作情境，呈現大型企業核心系統的可靠性要求。
+    expect(wrapper.text()).toContain('大型製造業集團')
+    expect(wrapper.text()).toContain('支撐跨部門日常營運的核心企業系統')
+    expect(wrapper.text()).toContain('最小修改、完整驗證及可回滾')
+  })
+
   it('以專業狀態與時間軸強化後段內容', () => {
     const wrapper = mount(App)
 
