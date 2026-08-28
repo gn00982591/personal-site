@@ -78,6 +78,16 @@ export const profile = {
   ],
   contact: {
     email: 'gn00982591@gmail.com',
-    github: 'https://github.com/gn00982591'
+    github: 'https://github.com/gn00982591',
+    // 104 分享連結與 QR Code 路徑集中管理，連結到期時只需修改此處與重新產生圖片。
+    resume104: {
+      url: 'https://pda.104.com.tw/profile/share/dkflj2HPCNcMTCAkHoRX7U6r90nVp39U',
+      qrCode: 'resume-104-qr.png'
+    },
+    // 網站建立流程與更新月份保持精簡；實際版本由 GitHub 分支與 Commit 動態注入。
+    siteBuild: {
+      process: '需求整理 → AI 協作設計 → Vue 開發 → 測試驗證 → GitHub Pages',
+      updated: '2026.08'
+    }
   }
 }

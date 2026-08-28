@@ -37,6 +37,10 @@ jobs:
         run: npm test
 
       - name: Build site
+        # 將實際部署分支與 Commit 注入網站，讓頁尾版本可追溯至 GitHub。
+        env:
+          VITE_GIT_BRANCH: ${{ github.ref_name }}
+          VITE_GIT_SHA: ${{ github.sha }}
         run: npm run build
 
       - name: Upload Pages artifact
