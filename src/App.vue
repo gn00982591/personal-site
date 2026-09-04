@@ -4,7 +4,6 @@ import HeroSection from './components/HeroSection.vue'
 import ProfileSection from './components/ProfileSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
 import WorkMethodSection from './components/WorkMethodSection.vue'
-import ContactSection from './components/ContactSection.vue'
 import SiteHeader from './components/SiteHeader.vue'
 import { profile } from './data/profile'
 
@@ -15,6 +14,9 @@ let lastScrollY = 0
 let scrollDirection = 'down'
 const appRoot = ref(null)
 const scrollProgress = ref(0)
+// 正式部署顯示 GitHub 分支與短版 Commit 碼；本機未注入時保留可辨識的預設值。
+const gitBranch = import.meta.env.VITE_GIT_BRANCH || 'local'
+const gitCommit = (import.meta.env.VITE_GIT_SHA || 'working-tree').slice(0, 7)
 
 // 同步捲動方向與閱讀進度；使用動畫影格避免高頻 scroll 事件重複計算。
 const updateScrollState = () => {
@@ -88,10 +90,18 @@ onBeforeUnmount(() => {
     <ProfileSection :about="profile.about" :highlights="profile.highlights" :skills="profile.skills" />
     <ProjectsSection :projects="profile.projects" />
     <WorkMethodSection :methods="profile.workMethods" :tools="profile.tools" :ai-practice="profile.aiPractice" />
-    <ContactSection :contact="profile.contact" />
   </main>
     <footer class="site-footer">
-      <div class="container">以清楚的邏輯，打造穩定可維護的企業系統。</div>
+      <div class="container site-footer__inner">
+        <div>以清楚的邏輯，打造穩定可維護的企業系統。</div>
+        <!-- 聯絡方式移除後，網站建立流程與 GitHub 版本仍獨立保留在頁尾。 -->
+        <div class="site-build-meta" aria-label="網站建立流程與版本">
+          <p><strong>建立流程</strong><span>{{ profile.siteBuild.process }}</span></p>
+          <p class="site-build-meta__version">
+            <strong>GitHub</strong><span>{{ gitBranch }} · {{ gitCommit }}</span><span>{{ profile.siteBuild.updated }}</span>
+          </p>
+        </div>
+      </div>
     </footer>
   </div>
 </template>

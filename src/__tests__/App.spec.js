@@ -24,15 +24,13 @@ describe('App', () => {
     expect(flow.findAll('.system-flow__node')).toHaveLength(4)
   })
 
-  it('顯示四個匿名代表案例與正確聯絡方式', () => {
+  it('顯示四個匿名代表案例', () => {
     const wrapper = mount(App)
 
     expect(wrapper.text()).toContain('運輸與派車管理系統')
     expect(wrapper.text()).toContain('外銷訂單與文件系統')
     expect(wrapper.text()).toContain('ERP／WMS 資料整合')
     expect(wrapper.text()).toContain('系統穩定性與異常處理')
-    expect(wrapper.get('a[href="mailto:gn00982591@gmail.com"]').exists()).toBe(true)
-    expect(wrapper.get('a[href="https://github.com/gn00982591"]').exists()).toBe(true)
   })
 
   it('以人物照片與專業定位介紹本人', () => {
@@ -59,33 +57,33 @@ describe('App', () => {
     const wrapper = mount(App)
 
     expect(wrapper.get('.method-timeline').attributes('aria-label')).toBe('企業系統問題處理流程')
-    expect(wrapper.text()).toContain('目前開放職涯交流')
     expect(wrapper.findAll('.project-card[data-sequence]')).toHaveLength(4)
   })
 
-  it('在聯絡區提供 104 履歷連結與 QR Code', () => {
+  it('不再公開求職聯絡方式與 QR Code', () => {
     const wrapper = mount(App)
-    const resumeLink = wrapper.get('a[href="https://pda.104.com.tw/profile/share/dkflj2HPCNcMTCAkHoRX7U6r90nVp39U"]')
-    const resumeQrCode = wrapper.get('img[alt="掃描 QR Code 查看 104 完整履歷"]')
 
-    // 104 履歷使用安全的新分頁連結，QR Code 則提供電腦版訪客以手機掃描。
-    expect(resumeLink.text()).toContain('查看 104 完整履歷')
-    expect(resumeLink.attributes('target')).toBe('_blank')
-    expect(resumeLink.attributes('rel')).toContain('noreferrer')
-    expect(resumeQrCode.attributes('src')).toContain('resume-104-qr.png')
+    // 面試完成後移除所有公開求職入口，避免舊連結或聯絡資料繼續曝光。
+    expect(wrapper.find('a[href^="mailto:"]').exists()).toBe(false)
+    expect(wrapper.find('a[href^="https://github.com/"]').exists()).toBe(false)
+    expect(wrapper.find('a[href*="pda.104.com.tw"]').exists()).toBe(false)
+    expect(wrapper.find('img[src*="resume-104-qr.png"]').exists()).toBe(false)
+    expect(wrapper.find('#contact').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('目前開放職涯交流')
+    expect(wrapper.text()).not.toContain('聯絡我')
   })
 
-  it('在聯絡區最底端精簡呈現網站建立流程與版本', () => {
+  it('在頁尾精簡呈現網站建立流程與版本', () => {
     vi.stubEnv('VITE_GIT_BRANCH', 'main')
     vi.stubEnv('VITE_GIT_SHA', '45db5f35abbab35d852d7125e08e9e5af94e61e5')
     const wrapper = mount(App)
-    const siteBuildMeta = wrapper.get('[aria-label="網站建立流程與版本"]')
+    const siteBuildMeta = wrapper.get('.site-footer [aria-label="網站建立流程與版本"]')
 
     // GitHub 分支與短版 Commit 碼對應實際部署來源，避免使用無法追溯的固定版號。
     expect(siteBuildMeta.text()).toContain('需求整理 → AI 協作設計 → Vue 開發 → 測試驗證 → GitHub Pages')
     expect(siteBuildMeta.text()).toContain('GitHub')
     expect(siteBuildMeta.text()).toContain('main · 45db5f3')
-    expect(siteBuildMeta.text()).toContain('2026.08')
+    expect(siteBuildMeta.text()).toContain('2026.09')
     vi.unstubAllEnvs()
   })
 
@@ -112,9 +110,10 @@ describe('App', () => {
   it('提供完整區塊導覽與可理解的互動控制', () => {
     const wrapper = mount(App)
 
-    for (const href of ['#about', '#skills', '#projects', '#methods', '#contact']) {
+    for (const href of ['#about', '#skills', '#projects', '#methods']) {
       expect(wrapper.get(`a[href="${href}"]`).exists()).toBe(true)
     }
+    expect(wrapper.find('a[href="#contact"]').exists()).toBe(false)
     expect(wrapper.get('button[aria-controls="site-navigation"]').attributes('aria-expanded')).toBe('false')
     expect(wrapper.get('button[aria-label*="模式"]').exists()).toBe(true)
   })

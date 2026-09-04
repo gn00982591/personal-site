@@ -5,12 +5,12 @@ import { useTheme } from '../composables/useTheme'
 const isMenuOpen = ref(false)
 const { theme, toggleTheme } = useTheme()
 
+// 面試完成後導覽只保留作品內容，不再提供公開聯絡入口。
 const navigationItems = [
   { label: '關於我', href: '#about' },
   { label: '核心能力', href: '#skills' },
   { label: '代表案例', href: '#projects' },
-  { label: '技術與方法', href: '#methods' },
-  { label: '聯絡方式', href: '#contact' }
+  { label: '技術與方法', href: '#methods' }
 ]
 
 // 手機版選取導覽項目後收合選單，避免遮住後續內容。

@@ -76,18 +76,9 @@ export const profile = {
     'ASP.NET Core', 'ASP.NET MVC', 'C#', 'Vue 3', 'JavaScript', 'EF Core', 'SQL Server', 'RDL', 'REST API', 'Git',
     'Cursor', 'AI 協作開發', 'AI 輔助程式邏輯分析', 'Context Engineering', 'AI 輔助測試設計'
   ],
-  contact: {
-    email: 'gn00982591@gmail.com',
-    github: 'https://github.com/gn00982591',
-    // 104 分享連結與 QR Code 路徑集中管理，連結到期時只需修改此處與重新產生圖片。
-    resume104: {
-      url: 'https://pda.104.com.tw/profile/share/dkflj2HPCNcMTCAkHoRX7U6r90nVp39U',
-      qrCode: 'resume-104-qr.png'
-    },
-    // 網站建立流程與更新月份保持精簡；實際版本由 GitHub 分支與 Commit 動態注入。
-    siteBuild: {
-      process: '需求整理 → AI 協作設計 → Vue 開發 → 測試驗證 → GitHub Pages',
-      updated: '2026.08'
-    }
+  // 網站建立資訊不含聯絡資料，實際版本仍由 GitHub 分支與 Commit 動態注入。
+  siteBuild: {
+    process: '需求整理 → AI 協作設計 → Vue 開發 → 測試驗證 → GitHub Pages',
+    updated: '2026.09'
   }
 }

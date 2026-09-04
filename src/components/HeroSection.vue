@@ -13,9 +13,9 @@ defineProps({
         <p class="eyebrow">{{ direction }}</p>
         <h1 id="hero-title">{{ title }}</h1>
         <p class="hero__summary">{{ summary }}</p>
+        <!-- 面試完成後只保留作品入口，不再從首頁導向公開聯絡方式。 -->
         <div class="hero__actions">
           <a class="button button--primary" href="#projects">查看代表案例</a>
-          <a class="button button--secondary" href="#contact">聯絡我</a>
         </div>
       </div>
       <!-- 以可閱讀的動態資料流，呈現企業系統從需求到資料落地的完整能力。 -->
